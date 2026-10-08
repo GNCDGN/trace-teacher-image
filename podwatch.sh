@@ -20,6 +20,7 @@ term() {
 echo "$(date -u +%FT%TZ) podwatch armed pod=$POD deadline=$DEADLINE grace=$GRACE first=$FIRST"
 while true; do
   now=$(date +%s)
+  [ -f "$RUN_DIR/deadline" ] && DEADLINE=$(cat "$RUN_DIR/deadline")
   if [ "$DEADLINE" -gt 0 ] && [ "$now" -ge "$DEADLINE" ]; then term "deadline"; continue; fi
   if [ -f "$HB" ]; then
     age=$(( now - $(stat -c %Y "$HB") ))

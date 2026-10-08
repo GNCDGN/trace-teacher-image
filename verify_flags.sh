@@ -28,5 +28,12 @@ names = set(getattr(T, "tool_parsers", {}) .keys()) | set(getattr(T, "lazy_parse
 for x in ("qwen3_coder","qwen3_xml"): print("tool parser", x, "ok" if x in names else "MISSING")
 sys.exit(0 if "qwen3_coder" in names else 1)
 PY
-echo "reasoning parser qwen3: $(python3 -c 'import vllm.reasoning as r;print(\"qwen3\" in getattr(r.ReasoningParserManager,\"reasoning_parsers\",{}) or \"qwen3\" in getattr(r.ReasoningParserManager,\"lazy_parsers\",{}))' 2>&1 | tail -1)"
+python3 - <<'PY' || fail=1
+import sys
+try:
+    from vllm.reasoning import ReasoningParserManager as R
+    R.get_reasoning_parser("qwen3"); print("reasoning parser qwen3 ok")
+except Exception as e:
+    print("REASONING PARSER qwen3 check failed:", type(e).__name__, e); sys.exit(1)
+PY
 exit $fail

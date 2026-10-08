@@ -5,5 +5,6 @@ COPY --from=llama /opt/llama.cpp /opt/llama.cpp
 RUN pip install --no-cache-dir --no-deps -e /opt/llama.cpp/gguf-py \
  && pip freeze > /opt/trace/train-freeze.txt
 ENV PATH=/opt/llama.cpp/bin:$PATH
-RUN ls /opt/llama.cpp/bin && (ldd /opt/llama.cpp/bin/llama-server | grep -i "not found" || echo "no missing libs") | tee /opt/trace/llama-ldd.txt && python3 -c "import gguf;print('gguf ok')"
+RUN d=$(dirname $(find /usr/local/lib/python3.12 /usr/lib -name 'libnccl.so.2*' 2>/dev/null | head -1)) && echo "nccl dir: $d" && echo "$d" > /etc/ld.so.conf.d/trace-nccl.conf && ldconfig
+RUN ls /opt/llama.cpp/bin && (ldd /opt/llama.cpp/bin/llama-server | grep -i "not found" | grep -v libcuda.so.1 || echo "no missing libs (libcuda.so.1 is injected by the NVIDIA runtime at pod start)") | tee /opt/trace/llama-ldd.txt && python3 -c "import gguf;print('gguf ok')"
 LABEL org.opencontainers.image.source="https://github.com/GNCDGN/trace-teacher-image"

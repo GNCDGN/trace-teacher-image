@@ -14,7 +14,7 @@ COPY --from=llama /opt/llama.cpp /opt/llama.cpp
 COPY constraints.txt /opt/trace/constraints.txt
 RUN pip uninstall -y vllm >/dev/null 2>&1; \
     pip install --no-cache-dir -c /opt/trace/constraints.txt \
-      unsloth==2026.10.3 unsloth_zoo==2026.10.3 peft==0.21.2 trl==1.13.0 bitsandbytes==0.50.2 accelerate==1.15.0 datasets==5.1.0 \
+      unsloth==2026.10.3 unsloth_zoo==2026.10.3 peft==0.21.2 trl==1.13.0 bitsandbytes==0.50.2 accelerate==1.15.0 datasets==4.8.5 \
       flash-linear-attention==0.5.2 hf_transfer pyyaml sentencepiece protobuf numpy \
  && pip install --no-cache-dir -r /opt/llama.cpp/requirements/requirements-convert_hf_to_gguf.txt -c /opt/trace/constraints.txt \
  && pip install --no-cache-dir -e /opt/llama.cpp/gguf-py -c /opt/trace/constraints.txt \

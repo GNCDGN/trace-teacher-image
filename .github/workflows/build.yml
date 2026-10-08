@@ -28,4 +28,4 @@ jobs:
           push: true
           provenance: false
           tags: |
-            ghcr.io/gncdgn/trace-teacher:vllm0.31.0-r1
+            ghcr.io/gncdgn/trace-teacher:vllm0.31.0-r2

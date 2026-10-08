@@ -1,8 +1,6 @@
 name: build-train
 on:
   workflow_dispatch:
-  push:
-    paths: ["train/**", ".github/workflows/build-train.yml"]
 jobs:
   image:
     runs-on: ubuntu-latest
@@ -21,8 +19,7 @@ jobs:
       - uses: docker/build-push-action@v6
         with:
           context: train
+          file: train/Dockerfile
           push: true
           provenance: false
-          cache-from: type=gha
-          cache-to: type=gha,mode=max
           tags: ghcr.io/gncdgn/trace-train:u2026.10.3-r1
